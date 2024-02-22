@@ -1,11 +1,15 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { server } from "../server";
 
 const ActivationPage = () => {
-	const { activation_token } = useParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+	const searchParams = new URLSearchParams(location.search);
+	const activation_token = searchParams.get("token");
+
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
@@ -16,15 +20,19 @@ const ActivationPage = () => {
 						activation_token,
 					})
 					.then((res) => {
-						console.log(res);
+						const { token } = res.data;
+						localStorage.setItem("token", token);
 					})
 					.catch((err) => {
 						setError(true);
+					})
+					.finally(() => {
+						setTimeout(() => navigate("/login"), 3000);
 					});
 			};
 			sendRequest();
 		}
-	}, [activation_token]);
+	}, [activation_token, navigate]);
 
 	return (
 		<div
