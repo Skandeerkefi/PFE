@@ -2,17 +2,13 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ActivationPage, LoginPage, SignupPage } from "./Routes.js";
-import { loadUser } from "./redux/actions/user";
-import { useDispatch } from "react-redux"; // Import useDispatch hook
 import Store from "./redux/store";
+import { loadUser } from "./redux/actions/user";
 
 const App = () => {
-	const dispatch = useDispatch(); // Initialize useDispatch hook
-
 	useEffect(() => {
-		Store.dispatch(loadUser()); // Dispatch the action to load user on component mount
-	}, [dispatch]); // Add dispatch as a dependency to useEffect
-
+		Store.dispatch(loadUser());
+	}, []);
 	return (
 		<BrowserRouter>
 			<Routes>

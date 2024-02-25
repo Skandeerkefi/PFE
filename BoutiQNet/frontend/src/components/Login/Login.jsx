@@ -16,20 +16,23 @@ const Login = () => {
 		e.preventDefault();
 
 		try {
-			const res = await axios.post(`${server}/user/login-user`, {
-				email,
-				password,
-			});
-
-			const { token } = res.data;
-			localStorage.setItem("token", token);
+			await axios.post(
+				`${server}/user/login-user`,
+				{
+					email,
+					password,
+				},
+				{ withCredentials: true }
+			);
 
 			Swal.fire({
 				icon: "success",
 				title: "Login Success!",
 				showConfirmButton: false,
 				timer: 1500,
-			}).then(() => {
+			}).then(async (res) => {
+				const { token } = await res.data;
+				localStorage.setItem("token", token);
 				navigate("/");
 				window.location.reload(true);
 			});

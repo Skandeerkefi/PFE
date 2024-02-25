@@ -38,7 +38,7 @@ const Signup = () => {
 					title: "Success",
 					text: res.data.message,
 					showConfirmButton: false,
-					timer: 2000, // Close alert after 2 seconds
+					timer: 3000, // Close alert after 2 seconds
 				});
 				setName("");
 				setEmail("");

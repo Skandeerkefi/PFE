@@ -9,7 +9,7 @@ const app = express();
 // Configuration
 if (process.env.NODE_ENV !== "PRODUCTION") {
 	require("dotenv").config({
-		path: "config/.env",
+		path: "backend/config/.env",
 	});
 }
 
@@ -18,11 +18,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
 	cors({
-		origin: true,
+		origin: "http://localhost:3000",
 		credentials: true,
 	})
 );
-app.use(express.static("uploads"));
+app.use("/", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 // Routes

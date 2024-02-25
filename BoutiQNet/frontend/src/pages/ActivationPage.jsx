@@ -1,33 +1,30 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { server } from "../server";
 
 const ActivationPage = () => {
-	const location = useLocation();
-	const navigate = useNavigate();
-	const searchParams = new URLSearchParams(location.search);
-	const activation_token = searchParams.get("token");
-
+	const { activation_token } = useParams();
 	const [error, setError] = useState(false);
-	const [loading, setLoading] = useState(true);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (activation_token) {
 			const sendRequest = async () => {
-				try {
-					const response = await axios.post(`${server}/user/activation`, {
+				await axios
+					.post(`${server}/user/activation`, {
 						activation_token,
+					})
+					.then((res) => {
+						console.log(res);
+					})
+					.catch((err) => {
+						setError(true);
+					})
+					.finally(() => {
+						setTimeout(() => navigate("/login"), 3000);
 					});
-					const { token } = response.data;
-					localStorage.setItem("token", token);
-					// Redirect to login page after successful activation
-					setTimeout(() => navigate("/login"), 2000);
-				} catch (error) {
-					setError(true);
-				} finally {
-					setLoading(false);
-				}
 			};
 			sendRequest();
 		}
@@ -43,12 +40,10 @@ const ActivationPage = () => {
 				alignItems: "center",
 			}}
 		>
-			{loading ? (
-				<p>Loading...</p>
-			) : error ? (
+			{error ? (
 				<p>Your token is expired!</p>
 			) : (
-				<p>Your account has been created successfully!</p>
+				<p>Your account has been created suceessfully!</p>
 			)}
 		</div>
 	);
